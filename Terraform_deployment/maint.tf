@@ -132,7 +132,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
     version   = "latest"
   }
 
-  computer_name  = "NetworkAssign-2"
+  computer_name  = "NetworkAssign"
   disable_password_authentication = true
 }
 
