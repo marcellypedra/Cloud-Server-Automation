@@ -113,7 +113,12 @@ resource "azurerm_linux_virtual_machine" "vm" {
 
   size               = "Standard_B1s"
   admin_username     = "MP20040674"
-  admin_password     = "P@ssw0rd123!"
+  
+   # Configure SSH key for access
+  admin_ssh_key {
+    username   = "MP20040674"  # Should match admin_username
+    public_key = file("~/.ssh/id_ed25519.pub")  # Path to your public SSH key file
+  }
 
   os_disk {
     caching              = "ReadWrite"
@@ -128,7 +133,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   }
 
   computer_name  = "NetworkAssign-2"
-  disable_password_authentication = false
+  disable_password_authentication = true
 }
 
 # Associate NSG with Subnet
