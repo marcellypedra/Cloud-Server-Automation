@@ -15,7 +15,7 @@ This repository contains scripts to install Terraform, Ansible, and Docker on yo
       
 ## Clone this repository:
    ```git clone https://github.com/marcellypedra/Cloud-Server-Automation.git```   
-   ```cd Cloud-Server-Automation```
+   ```cd Cloud-Server-Automation/Terraform_deployment```
    
    ### Make the script executable by giving it the correct permissions. 
       chmod +x install_terraform.sh install_ansible.sh install_docker.sh
