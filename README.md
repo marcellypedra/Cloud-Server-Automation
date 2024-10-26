@@ -14,7 +14,7 @@ This repository contains scripts to install Terraform, Ansible, and Docker on yo
       ```sudo apt update && sudo apt upgrade -y```
       
 ## Clone this repository:
-   ```git clone https://github.com/20058225/infra-setup-azure.git```   
+   ```git clone https://github.com/marcellypedra/Cloud-Server-Automation.git```   
    ```cd infra-setup-azure```
    
    ### Make the script executable by giving it the correct permissions. 
