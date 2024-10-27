@@ -18,7 +18,7 @@ This repository contains scripts to install Terraform, Ansible, and Docker on yo
    ```cd Cloud-Server-Automation/Terraform_deployment```
    
    ### Make the script executable by giving it the correct permissions. 
-      chmod +x terraform_install.sh install_ansible.sh install_docker.sh
+      chmod +x terraform_install.sh ansible_install.sh docker_install.sh
 
    - Terraform install and verify
       1. ```./terraform_install.sh```   
