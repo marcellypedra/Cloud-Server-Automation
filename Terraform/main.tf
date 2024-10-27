@@ -15,13 +15,13 @@ provider "azurerm" {
 
 # Declare Resource Group
 resource "azurerm_resource_group" "rg" {
-  name     = "B9IS121-rg"
+  name     = "cloud_client-rg"
   location = "westeurope"
 }
 
 # Declare Virtual Network
 resource "azurerm_virtual_network" "vnet" {
-  name                = "B9IS121-vnet"
+  name                = "cloud_client-vnet"
   address_space       = ["10.1.0.0/16"]
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
@@ -29,7 +29,7 @@ resource "azurerm_virtual_network" "vnet" {
 
 # Declare Subnet
 resource "azurerm_subnet" "subnet" {
-  name                 = "B9IS121-subnet"
+  name                 = "cloud_client-subnet"
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = ["10.1.0.0/24"]
@@ -37,7 +37,7 @@ resource "azurerm_subnet" "subnet" {
 
 # Declare Network Security Group with Fixed Protocol
 resource "azurerm_network_security_group" "nsg" {
-  name                = "B9IS121-nsg"
+  name                = "cloud_client-nsg"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 
@@ -80,7 +80,7 @@ resource "azurerm_network_security_group" "nsg" {
 
 # Declare Public IP
 resource "azurerm_public_ip" "public_ip" {
-  name                = "B9IS121-public_ip"
+  name                = "cloud_client-public_ip"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Static"
@@ -89,12 +89,12 @@ resource "azurerm_public_ip" "public_ip" {
 
 # Declare Network Interface
 resource "azurerm_network_interface" "nic" {
-  name                = "B9IS121-nic"
+  name                = "cloud_client-nic"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 
   ip_configuration {
-    name                          = "B9IS121-nic-config"
+    name                          = "cloud_client-nic-config"
     subnet_id                     = azurerm_subnet.subnet.id
     private_ip_address_allocation = "Static"
     private_ip_address            = "10.1.0.4"  
@@ -104,7 +104,7 @@ resource "azurerm_network_interface" "nic" {
 
 # Declare Virtual Machine
 resource "azurerm_linux_virtual_machine" "vm" {
-  name                = "networkassign-vm-2"
+  name                = "cloud_client-vm"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   network_interface_ids = [
@@ -132,7 +132,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
     version   = "latest"
   }
 
-  computer_name  = "NetworkAssign"
+  computer_name  = "cloud_client"
   disable_password_authentication = true
 }
 
