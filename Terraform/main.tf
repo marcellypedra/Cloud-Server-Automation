@@ -132,7 +132,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
     version   = "latest"
   }
 
-  computer_name  = "cloud_client"
+  computer_name  = "Cloud Client"
   disable_password_authentication = true
 }
 
