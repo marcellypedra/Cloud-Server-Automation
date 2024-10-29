@@ -2,6 +2,8 @@
 - name: Install Docker on VM
   hosts: docker_hosts
   become: true
+  vars:
+    useradmin: MP20040674
   tasks:
     - name: Update apt packages
       apt:
@@ -47,6 +49,6 @@
 
     - name: Add user to Docker group
       user:
-        name: "{{ admin_user }}"
+        name: "{{ useradmin }}"
         groups: docker
         append: yes
