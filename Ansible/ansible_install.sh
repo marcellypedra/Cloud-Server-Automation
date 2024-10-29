@@ -24,4 +24,4 @@ echo "Setting Up the Python Virtual Environment in progress..."
 # Testing Ansible with an Inventory and Playbook
 echo "Testing Ansible with an Inventory and Playbook in progress..."
   ansible all -i inventory.ini -m ping
-  ansible-playbook -i inventory.ini playbook.yml
+  ansible-playbook -i inventory.ini docker_install.yml
