@@ -1,0 +1,10 @@
+FROM mysql:9.1.0
+COPY #individual file / folder where to put it [package.json /app]
+#OR
+COPY #all the directory [src/ app]
+
+WORKDIR #f folder created previously [/app]
+
+RUN #[npm install]
+
+CMD # ["node", "server.js"]

@@ -1,7 +1,18 @@
+#create a new directory for the application and install node.js
+mkdir sample-app
+cd sample-app
+sudo apt install npm
+npm init -y
+npm install express
+
+
+
 #Add the User to the Docker Group for access permission
 sudo usermod -aG docker [VM username]
 newgrp docker
 docker ps
+
+
 
 #Starter Docker
 docker run -d -p 80:80 docker/getting-started
@@ -26,6 +37,9 @@ docker run --name [container name] -d -p [host port]:80 nginx
 
 #confirmation that the image is now running in the right port
 docker logs [container ID]
+
+#building the image form the docker file
+docker build -t [image name]:[tag] . 
 
 
 

@@ -1,0 +1,13 @@
+{
+    "name": "express-app",
+    "version": "1.0.0",
+    "description": "A simple Express web application",
+    "main": "express.js",
+    "scripts": {
+      "start": "node app.js"
+    },
+    "dependencies": {
+      "express": "^5.0"
+    }
+  }
+  
