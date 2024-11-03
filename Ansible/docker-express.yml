@@ -1,13 +1,7 @@
-- name: Deploy Sample App Docker Container
-  hosts: your_server_ip
+- name: Deploy Express App Docker Container
+  hosts: docker_hosts
   become: true
   tasks:
-    - name: Install Docker
-      apt:
-        name: docker.io
-        state: present
-        update_cache: yes
-
     - name: Start Docker service
       systemd:
         name: docker
@@ -16,17 +10,17 @@
 
     - name: Pull Docker image from local build
       copy:
-        src: /path/to/your/local/sample-app
-        dest: /path/on/remote/sample-app
+        src: /home/MP20040674/Cloud-Server-Automation/Docker/express-app
+        dest: /usr/src/app
         mode: 0755
 
     - name: Build Docker image on the server
-      command: docker build -t sample-app /path/on/remote/sample-app
+      command: docker build -t express-app /usr/src/app/express-app
 
     - name: Run Docker container for sample app
       docker_container:
-        name: sample-app
-        image: sample-app
+        name: express-app
+        image: express-app
         state: started
         ports:
           - "3000:3000"

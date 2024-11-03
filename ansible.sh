@@ -20,8 +20,15 @@ echo "Setting Up the Python Virtual Environment in progress..."
   source myenv/bin/activate
   pip install ansible
   # Creating and activating a virtual environment keeps the Ansible installation isolated from the system Python, reducing potential conflicts.
+  
+  # Verify TAnsible installation
+echo "Verifying the Ansible installation..."
+  ansible --version
+ #create files required for Ansible run
+ touch inventory.ini #pull it from Github?
+ touch docker_install.yml #pull it from Github?
 
-# Testing Ansible with an Inventory and Playbook
-echo "Testing Ansible with an Inventory and Playbook in progress..."
+# Running Ansible to install Docker on VM
+echo "Installing Docker on VM..."
   ansible all -i inventory.ini -m ping
   ansible-playbook -i inventory.ini docker_install.yml

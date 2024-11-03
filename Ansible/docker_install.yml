@@ -41,7 +41,7 @@
           - containerd.io
         state: present
 
-    - name: Start and enable Docker service
+    - name: Start and enable Docker service to start on the boot
       systemd:
         name: docker
         enabled: true
@@ -52,3 +52,4 @@
         name: "{{ useradmin }}"
         groups: docker
         append: yes
+        

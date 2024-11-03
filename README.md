@@ -3,6 +3,18 @@
 
 This repository contains scripts to install Terraform, Ansible, and Docker on your VM Azure.
 
+#Prepare Environment
+
+1. Create VM Linux as a Server using Azure (https://learn.microsoft.com/en-us/azure/virtual-machines/windows/quick-create-portal)
+2. Access your VM trhough your local terminal using SSH
+
+WSL | PowerShell | Command Prompt
+shh your_user@ServerVM_public_ip or shh your_user@ServerVM_DNS
+
+3. Create an SSH Key for the Server VM
+ssh-keygen
+
+
 ## Initial Installation
    1. Install Azure CLI   
       ```curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash```
@@ -18,23 +30,23 @@ This repository contains scripts to install Terraform, Ansible, and Docker on yo
    ```cd Cloud-Server-Automation/Terraform```
    
    ### Make the script executable by giving it the correct permissions. 
-      chmod +x terraform_install.sh docker_install.sh ansible_install.sh 
+      chmod +x terraform.sh docker.sh ansible.sh 
 
    - Terraform install and verify
-      1. ```./terraform_install.sh```   
-      2. ```terraform --version```   
-      3. ```terraform init```   
-      4.   ```terraform validate```
-      5. ```terraform plan```   
-      6. ```terraform apply```
-   - Docker install and verify
-      1. ```./docker_install.sh```   
-      2. ```docker --version```
-   - Ansible install and verify 
-      1. ```./ansible_install.sh```   
-      2. ```ansible --version```   
-   - Docker push container -> in progress
-      1. ```???```  
-      2. ```???```   
-      3. ```???```   
+      1. ```./terraform.sh```   
+      
+   - Ansible and Docker install and verify
+      1. ```./ansible.sh```   
      
+
+   - Docker create an image, push container and verify
+      1. ```./docker.sh``` 
+        
+
+        
+     
+
+
+
+
+

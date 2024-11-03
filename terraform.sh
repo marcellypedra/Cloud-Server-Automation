@@ -27,3 +27,14 @@ rm LICENSE.txt
 rm terraform_1.9.8_linux_amd64.zip
 # Installation complete
 echo "Terraform installation complete."
+
+cd terraform
+terraform init
+echo "Terraform validation in progress..."
+terraform validate
+
+echo "Terraform planning in progress..."
+terraform plan
+
+echo "Terraform applying in progress..."
+terraform apply
