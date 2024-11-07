@@ -50,7 +50,9 @@ Pipeline configuration
 3.Navigate to Pipelines
 4. Select Your Code Repository (GitHub)
 5. Select Stater Pipeline
-6.configurate your YAML file for pipeline
+6.configure your YAML file for pipeline
+7. Configure Variable file in the Library Section of Pipelines in Azure
+
 
 
 
