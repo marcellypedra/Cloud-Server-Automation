@@ -1,23 +1,76 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
-- main
-
-pool:
-  vmImage: ubuntu-latest
+  branches:
+    include:
+      - main  # Trigger pipeline on pushes to the main branch
 
 variables:
-  MY_API_KEY: $(MY_API_KEY)
+  # Docker Image tag
+- group: MyVariableGroup
+  imageName: 'my-app'
+  dockerRegistryServiceConnection: 'docker-service-connection' # Docker registry service connection
+  containerRegistry: 'mycontainerregistry.azurecr.io'  # Or Docker Hub if you're using it
+  azureSubscription: 'my-azure-subscription'  # Azure subscription service connection
+  vmUsername: 'MP20040674'  # Username for your Azure VM
+  vmIpAddress: 'xx.xx.xx.xx'  # Public IP address of the Azure VM
 
-steps:
-- checkout: self
+jobs:
+- job: BuildAndDeploy
+  displayName: 'Build and Deploy Docker Container to Azure VM'
 
-- script: |
-    chmod +x ./scripts/deploy.sh
-    ./scripts/deploy.sh
-  displayName: 'Run deploy.sh script'
-  env:
-    MY_VAR: 'value'
+  pool:
+    vmImage: 'ubuntu-latest'  # Use Ubuntu agent for the pipeline
+
+  steps:
+  # Step 1: Checkout Code from GitHub
+  - task: Checkout@1
+    displayName: 'Checkout Repository'
+
+  # Step 2: Build Docker Image
+  - task: Docker@2
+    displayName: 'Build Docker Image'
+    inputs:
+      command: 'build'
+      repository: $(containerRegistry)/$(imageName)
+      dockerfile: '**/Dockerfile'
+      tags: |
+        $(Build.BuildId)
+
+  # Step 3: Push Docker Image to Registry
+  - task: Docker@2
+    displayName: 'Push Docker Image to Registry'
+    inputs:
+      command: 'push'
+      repository: $(containerRegistry)/$(imageName)
+      tags: |
+        $(Build.BuildId)
+
+  # Step 4: SSH into Azure VM and Deploy Docker Image
+  - task: AzureCLI@2
+    displayName: 'Deploy Docker Image to Azure VM'
+    inputs:
+      azureSubscription: $(azureSubscription)  # Azure subscription service connection
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        # SSH into the Azure VM and deploy the Docker container
+        ssh -o StrictHostKeyChecking=no $(vmUsername)@$(vmIpAddress) << 'EOF'
+          # Install Docker if not already installed
+          if ! command -v docker &> /dev/null; then
+            echo "Docker not found, installing Docker..."
+            sudo apt-get update
+            sudo apt-get install -y docker.io
+          fi
+
+          # Log into the container registry (ACR or Docker Hub)
+          echo "$(dockerLoginPassword)" | sudo docker login $(containerRegistry) -u $(dockerUsername) --password-stdin
+
+          # Pull the latest Docker image
+          sudo docker pull $(containerRegistry)/$(imageName):$(Build.BuildId)
+
+          # Stop and remove the old container (if any)
+          sudo docker stop my-app-container || true
+          sudo docker rm my-app-container || true
+
+          # Run the new Docker container
+          sudo docker run -d --name my-app-container -p 80:80 $(containerRegistry)/$(imageName):$(Build.BuildId)
+        EOF
