@@ -40,7 +40,20 @@ ssh-keygen
      
 
    - Docker create an image, push container and verify
-      1. ```./docker.sh``` 
+      1. ```./docker.sh```
+    
+
+Pipeline configuration
+
+1.Log into Azure Devops within your Github account (dev.azure.com)
+2.Create an Azure DevOps Project
+3.Navigate to Pipelines
+4. Select Your Code Repository (GitHub)
+5. Select Stater Pipeline
+6.configurate your YAML file for pipeline
+
+
+
         
 
         
