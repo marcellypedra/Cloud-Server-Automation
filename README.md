@@ -45,19 +45,31 @@ ssh-keygen
 
 Pipeline configuration (Jenkins)
 
-See jenkins.sh
+- Jenkins Install
+  1. ````./jenkins.sh````
 
-Create an account at Docker Hub
+Port 8080 configuration
+- Open Port 8080 in Azure VM:
+1. Go to Networking under your VM settings in the Azure portal.
+2. Add an inbound port rule to allow TCP traffic on port 8080.
 
+- Access Jenkins Web Interface
+1. In your browser, go to http://your-vm-ip-address:8080.
+2. You should see the Jenkins setup page.
 
-1.Log into Azure Devops within your Github account (dev.azure.com)
-2.Create an Azure DevOps Project
-3.COnnect to your service Docker Hub in your azureDevops Project
-3.Navigate to Pipelines
-4. Select Your Code Repository (GitHub)
-5. Select Stater Pipeline
-6.configure your YAML file for pipeline
-7. Configure Variable file in the Library Section of Pipelines in Azure
+- Complete Setup
+  1. Go back to the terminal and find the initial admin password:
+   ````sudo cat /var/lib/jenkins/secrets/initialAdminPassword````
+  2. Copy the password and paste it into the Jenkins setup page.
+  3. Install Docker plugin, Github plugin, Azure CLI plugin and SSH plugin
+  4. create an admin user
+  5. Complete setup
+  6. Click on new item  in the left menu
+ 
+
+  
+   
+
 
 
 
