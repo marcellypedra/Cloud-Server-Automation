@@ -43,10 +43,16 @@ ssh-keygen
       1. ```./docker.sh```
     
 
-Pipeline configuration
+Pipeline configuration (Jenkins)
+
+See jenkins.sh
+
+Create an account at Docker Hub
+
 
 1.Log into Azure Devops within your Github account (dev.azure.com)
 2.Create an Azure DevOps Project
+3.COnnect to your service Docker Hub in your azureDevops Project
 3.Navigate to Pipelines
 4. Select Your Code Repository (GitHub)
 5. Select Stater Pipeline
