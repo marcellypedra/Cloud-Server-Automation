@@ -14,6 +14,8 @@ shh your_user@ServerVM_public_ip or shh your_user@ServerVM_DNS
 3. Create an SSH Key for the Server VM
 ssh-keygen
 
+4. install docker on server VM
+
 
 ## Initial Installation
    1. Install Azure CLI   
