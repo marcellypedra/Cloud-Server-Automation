@@ -1,7 +1,7 @@
 #-----CREATING EXPRESS DOCKER IMAGE--------#
 
 #create a new directory for the application and install node.js
-mkdir app
+[ ! -d app ] && mkdir app
 cd app
 sudo apt install npm
 npm init -y
@@ -19,12 +19,12 @@ ansible-playbook -i inventory.ini express-app.yml
 
 
 #create docker image and run docker container
-docker build -t express-app
+docker buildx build -t express-app:latest .
 docker run -p 3000:3000 express-app
 
 #check if the container is running
-#docker ps -a
-#docker logs [container ID]
+container_id=$(docker ps -l -q)
+docker logs "$container_id"
 
  
 
