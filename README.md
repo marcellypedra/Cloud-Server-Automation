@@ -69,19 +69,15 @@ Pipeline configuration (Jenkins)
   5. Complete setup
 
 - Github Webhook configuration
-
 1. Go to your Github Repository settings 
 2. On the left panel, choose "Webooks"
 3. "Add webhook" on the top-right
 4. In the Payload URL field, enter the Jenkins webhook URL, which usually looks like this: http://your-jenkins-url/github-webhook/
-
 5. Set Content type to "application/json"
-
 6. Under Which events would you like to trigger this webhook?, select "Just the push event to trigger the webhook only on code pushes."
 7. Click "Add webhook".
 
 - Add SSH Key to Jenkins Credentials
-
  1. Go to Jenkins Dashboard > Manage Jenkins > Manage Credentials.
  2. Under Global credentials, click Add Credentials.
 
