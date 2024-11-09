@@ -10,7 +10,7 @@
 
     - name: Pull Docker image from local build
       copy:
-        src: /home/MP20040674/Cloud-Server-Automation/Docker/express-app
+        src: /home/MP20040674/Cloud-Server-Automation/express-app
         dest: /usr/src/app
         mode: 0755
 

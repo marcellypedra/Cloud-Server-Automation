@@ -15,7 +15,7 @@ npm install express
 #touch dockerfile #pull this from Github?
 
 #Run Ansible to automate the image creation and run
-ansible-playbook -i inventory.ini docker-express.yml
+ansible-playbook -i inventory.ini express-app.yml
 
 
 #create docker image and run docker container
