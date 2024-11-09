@@ -50,6 +50,32 @@ Pipeline configuration (Jenkins)
 - Jenkins Install
   1. ````./jenkins.sh````
 
+Jenkins installation:
+
+Install Java 17 or Java 21 (depends on your machine requirements):
+OpenJDK JDK / JRE 17 - 64 bits
+OpenJDK JDK / JRE 21 - 64 bits
+
+Download and install Jenkins( Windows):
+
+go to https://www.jenkins.io/download/#downloading-jenkins
+and choose your operational system
+
+Configure Jenkins:
+
+Go to Manage Jenkins > Manage Credentials.
+
+
+
+
+
+
+
+
+
+
+
+
 Port 8080 configuration
 - Open Port 8080 in Azure VM:
 1. Go to Networking under your VM settings in the Azure portal.
