@@ -25,16 +25,7 @@ pipeline {
     }
 }
         
-        //stage('Push Docker Image to Registry') {
-            //steps {
-                // Push Docker image to a registry, if using Docker Hub or a private registry
-               // sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
-                
-               // echo 'Docker image push step (uncomment if needed for your registry)'
-           // }
-        //}//
-
-        stage('Deploy to Azure VM') {
+     stage('Deploy to Azure VM') {
             steps {
                 script {
                     // Use SSH to connect to the Azure VM and run Docker commands to pull and run the container

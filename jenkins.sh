@@ -40,6 +40,25 @@ sudo systemctl enable jenkins
 #Check Jenkins Status
 sudo systemctl status jenkins
 
+# Add server key to known_hosts if necessary
+KNOWN_HOSTS_FILE=~/.ssh/known_hosts
+SERVER_IP="<host_ip_or_hostname>"
+
+echo "@@ Checking known_hosts file..."
+if [ ! -f "$KNOWN_HOSTS_FILE" ]; then
+    echo "@@ Creating known_hosts file..."
+    mkdir -p ~/.ssh
+    touch "$KNOWN_HOSTS_FILE"
+fi
+
+echo "@@ Adding server key to known_hosts if not present..."
+if ! grep -q "$SERVER_IP" "$KNOWN_HOSTS_FILE"; then
+    ssh-keyscan -H "$SERVER_IP" >> "$KNOWN_HOSTS_FILE"
+    echo "@@ Server key added to known_hosts."
+else
+    echo "@@ Server key already exists in known_hosts."
+fi
+
 
 
 
