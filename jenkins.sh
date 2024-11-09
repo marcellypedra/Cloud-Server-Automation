@@ -28,7 +28,7 @@ echo "updating and installing Jenkins..."
 sudo apt-get update
 sudo apt-get install jenkins -y 
 
-echo"checking Jenkins version"
+echo "checking Jenkins version"
 jenkins --version
 
 
