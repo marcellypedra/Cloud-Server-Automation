@@ -20,7 +20,7 @@ pipeline {
     steps {
         script {
             // Build the Docker image, specifying the path to Dockerfile
-            sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} -f Cloud-Server-Automation/"
+            sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
         }
     }
 }
