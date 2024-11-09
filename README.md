@@ -65,6 +65,33 @@ Configure Jenkins:
 
 Go to Manage Jenkins > Manage Credentials.
 
+Add Docker Hub registry
+Add Azure CLI 
+
+2. Set Up the Jenkins Pipeline
+In Jenkins, create a new pipeline project:
+
+Go to Jenkins Dashboard > New Item.
+Choose Pipeline, give it a name,  and select Github Project
+
+Under General, check the GitHub Project checkbox.
+Enter the GitHub repository URL (e.g., https://github.com/your-org/your-repo).
+
+Configure Source Code Management with GitHub
+To enable Jenkins to pull code from your GitHub repository, configure the Source Code Management (SCM) section.
+
+In the Pipeline job configuration, scroll down to the Source Code Management section.
+Select Git.
+Enter your Repository URL (e.g., https://github.com/your-org/your-repo.git).
+Add Credentials if the repository is private, selecting the GitHub credentials you added to Jenkins.
+Specify the branch to build (e.g., main or */main).
+
+Select itHub hook trigger for GITScm polling.
+
+In the Payload URL field, enter the Jenkins webhook URL, which usually looks like this: http://your-jenkins-url/github-webhook/.
+Set Content type to application/json.
+Under Which events would you like to trigger this webhook?, select Just the push event to trigger the webhook only on code pushes.
+Click Add webhook.
 
 
 
