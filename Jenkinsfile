@@ -16,14 +16,14 @@ pipeline {
             }
         }
         
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    // Build the Docker image
-                    sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
-                }
-            }
+     stage('Build Docker Image') {
+    steps {
+        script {
+            // Build the Docker image, specifying the path to Dockerfile
+            sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} -f Docker/dockerfile ."
         }
+    }
+}
         
         //stage('Push Docker Image to Registry') {
             //steps {
