@@ -2,9 +2,12 @@
 
 #create a new directory for the application and install node.js
 [ ! -d app ] && mkdir app
+cd app
 sudo apt install npm
 npm init -y
 npm install express
+
+cd ..
 
 #create files required for node.js run express
 #touch app.js #pull it from Github?
