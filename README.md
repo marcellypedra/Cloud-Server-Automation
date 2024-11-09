@@ -44,69 +44,17 @@ ssh-keygen
    - Docker create an image, push container and verify
       1. ```./docker.sh```
     
-
-Pipeline configuration (Jenkins)
-
-- Jenkins Install
-  1. ````./jenkins.sh````
-
-Jenkins installation:
-
-Install Java 17 or Java 21 (depends on your machine requirements):
-OpenJDK JDK / JRE 17 - 64 bits
-OpenJDK JDK / JRE 21 - 64 bits
-
-Download and install Jenkins( Windows):
-
-go to https://www.jenkins.io/download/#downloading-jenkins
-and choose your operational system
-
-Configure Jenkins:
-
-Go to Manage Jenkins > Manage Credentials.
-
-Add Azure CLI 
-Add 
-
-2. Set Up the Jenkins Pipeline
-In Jenkins, create a new pipeline project:
-
-Go to Jenkins Dashboard > New Item.
-Choose Pipeline, give it a name,  and select Github Project
-
-Under General, check the GitHub Project checkbox.
-Enter the GitHub repository URL (e.g., https://github.com/your-org/your-repo).
-
-Configure Source Code Management with GitHub
-To enable Jenkins to pull code from your GitHub repository, configure the Source Code Management (SCM) section.
-
-In the Pipeline job configuration, scroll down to the Source Code Management section.
-Select Git.
-Enter your Repository URL (e.g., https://github.com/your-org/your-repo.git).
-Add Credentials if the repository is private, selecting the GitHub credentials you added to Jenkins.
-Specify the branch to build (e.g., main or */main).
-
-Select itHub hook trigger for GITScm polling.
-
-In the Payload URL field, enter the Jenkins webhook URL, which usually looks like this: http://your-jenkins-url/github-webhook/.
-Set Content type to application/json.
-Under Which events would you like to trigger this webhook?, select Just the push event to trigger the webhook only on code pushes.
-Click Add webhook.
-
-
-
-
-
-
-
-
-
-
+Preparing environment for Jenkins
 
 Port 8080 configuration
 - Open Port 8080 in Azure VM:
 1. Go to Networking under your VM settings in the Azure portal.
 2. Add an inbound port rule to allow TCP traffic on port 8080.
+Pipeline configuration (Jenkins)
+
+- Jenkins Install
+  1. ````./jenkins.sh````
+
 
 - Access Jenkins Web Interface
 1. In your browser, go to http://your-vm-ip-address:8080.
@@ -119,7 +67,69 @@ Port 8080 configuration
   3. Install Docker plugin, Github plugin, Azure CLI plugin and SSH plugin
   4. create an admin user
   5. Complete setup
-  6. Click on new item  in the left menu
+
+- Github Webhook configuration
+
+1. Go to your Github Repository settings 
+2. On the left panel, choose "Webooks"
+3. "Add webhook" on the top-right
+4. In the Payload URL field, enter the Jenkins webhook URL, which usually looks like this: http://your-jenkins-url/github-webhook/
+
+5. Set Content type to "application/json"
+
+6. Under Which events would you like to trigger this webhook?, select "Just the push event to trigger the webhook only on code pushes."
+7. Click "Add webhook".
+
+- Add SSH Key to Jenkins Credentials
+
+ 1. Go to Jenkins Dashboard > Manage Jenkins > Manage Credentials.
+ 2. Under Global credentials, click Add Credentials.
+
+  a. Kind: SSH Username with private key.
+  b. Username: Enter the SSH user for the Azure VM (e.g., azureuser).
+  c.Private Key: Choose Enter directly and paste the contents of your private SSH key (id_rsa).
+  d. ID: Give it an ID like azure-ssh.
+
+
+- Set Up the Jenkins Pipeline
+In Jenkins, create a new pipeline project:
+
+1. Go to Jenkins Dashboard > New Item.
+Choose Pipeline, give it a name,  and select Github Project
+
+2. Under General, check the GitHub Project checkbox.
+Enter the GitHub repository URL (e.g., https://github.com/your-org/your-repo).
+
+3. To enable Jenkins to pull code from your GitHub repository, configure the Source Code Management (SCM) section.
+
+4. In the Pipeline job configuration, scroll down to the Source Code Management section.
+Select Git.
+Enter your Repository URL (e.g., https://github.com/your-org/your-repo.git).
+
+5. Add Credentials if the repository is private, selecting the GitHub credentials you added to Jenkins.
+Specify the branch to build (e.g., main or */main).
+
+6. Select itHub hook trigger for GITScm polling.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Click on new item  in the left menu
  
 
   
