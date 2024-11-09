@@ -24,7 +24,7 @@ ansible-playbook -i inventory.ini express-app.yml
 docker buildx build -t express-app:latest .
 
 # Stop any containers using port 3000
-docker ps -q --filter "ancestor=express-app" | xargs docker stop
+docker ps -q --filter "publish=3000" | xargs docker stop
 
 # Run the Docker container, mapping to an available port
 docker run -p 3000:3000 express-app
