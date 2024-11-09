@@ -32,7 +32,7 @@ ssh-keygen
    ```cd Cloud-Server-Automation/Terraform```
    
    ### Make the script executable by giving it the correct permissions. 
-      chmod +x terraform.sh docker.sh ansible.sh 
+      chmod +x terraform.sh docker.sh ansible.sh jenkins.sh
 
    - Terraform install and verify
       1. ```./terraform.sh```   
