@@ -3,6 +3,39 @@ echo "updating system.."
 sudo apt update
 sudo apt upgrade -y
 
+# Creates a memory for swap file
+sudo fallocate -l 4G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+
+# Checking if Git is installed, install if missing
+if ! command -v git &> /dev/null; then
+    echo "@@ Installing Git..."
+    sudo apt install git -y
+else
+    echo "@@ Git is already installed"
+fi
+
+# Setting path to Git executable
+GIT_PATH=$(which git)
+echo "@@ Git path set to: $GIT_PATH"
+
+# Configure known_hosts entry for GitHub
+KNOWN_HOSTS_FILE=~/.ssh/known_hosts
+GITHUB_HOST="github.com"
+SERVER_IP="104.45.38.12"
+mkdir -p ~/.ssh
+
+for HOST in "$GITHUB_HOST" "$SERVER_IP"; do
+    if ! ssh-keygen -F "$HOST" &>/dev/null; then
+        echo "@@ Adding $HOST to known_hosts..."
+        ssh-keyscan -H "$HOST" >> "$KNOWN_HOSTS_FILE"
+    else
+        echo "@@ $HOST already exists in known_hosts"
+    fi
+done
+
 #Install Java and verify
 echo "installing Java.."
 sudo apt install fontconfig openjdk-17-jre
@@ -31,33 +64,22 @@ sudo apt-get install jenkins -y
 echo "checking Jenkins version"
 jenkins --version
 
+# Docker group for Jenkins user
+sudo usermod -aG docker jenkins
 
 #Start Jenkins and Enable Jenkins to start on boot
 echo "starting Jenkins.."
 sudo systemctl start jenkins
 sudo systemctl enable jenkins
 
+# Restart Jenkins to apply Docker group permissions
+echo "@@ Restarting Jenkins to apply permissions..."
+sudo systemctl restart jenkins
+
 #Check Jenkins Status
 sudo systemctl status jenkins
 
-# Add server key to known_hosts if necessary
-KNOWN_HOSTS_FILE=~/.ssh/known_hosts
-SERVER_IP="<host_ip_or_hostname>"
 
-echo "@@ Checking known_hosts file..."
-if [ ! -f "$KNOWN_HOSTS_FILE" ]; then
-    echo "@@ Creating known_hosts file..."
-    mkdir -p ~/.ssh
-    touch "$KNOWN_HOSTS_FILE"
-fi
-
-echo "@@ Adding server key to known_hosts if not present..."
-if ! grep -q "$SERVER_IP" "$KNOWN_HOSTS_FILE"; then
-    ssh-keyscan -H "$SERVER_IP" >> "$KNOWN_HOSTS_FILE"
-    echo "@@ Server key added to known_hosts."
-else
-    echo "@@ Server key already exists in known_hosts."
-fi
 
 
 

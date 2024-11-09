@@ -65,8 +65,8 @@ Configure Jenkins:
 
 Go to Manage Jenkins > Manage Credentials.
 
-Add Docker Hub registry
 Add Azure CLI 
+Add 
 
 2. Set Up the Jenkins Pipeline
 In Jenkins, create a new pipeline project:
