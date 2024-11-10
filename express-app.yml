@@ -1,36 +1,32 @@
-- name: Deploy Express App Docker Container
+- name: Build, save, and deploy Docker container to remote server
+  hosts: localhost
+  tasks:
+    - name: Build the Docker image locally
+      command: docker build -t express-app /home/MP20040674/Cloud-Server-Automation/
+      args:
+        chdir: /home/MP20040674/Cloud-Server-Automation/   # Adjust this path to your app's directory
+
+    - name: Save the Docker image to a tar file
+      command: docker save -o /home/MP20040674/Cloud-Server-Automation/express-app.tar express-app
+
+- name: Transfer and deploy Docker container on remote server
   hosts: docker_hosts
   become: true
   tasks:
-    - name: Ensure Docker service is running
+    - name: Ensure Docker service is running on remote server
       systemd:
         name: docker
         state: started
         enabled: true
 
-    - name: Build the Docker image for the Express app
-      command: docker build -t express-app /home/MP20040674/Cloud-Server-Automation
-      args:
-        chdir: /home/MP20040674/Cloud-Server-Automation
-
-    - name: Run the Docker container for the Express app
-      docker_container:
-        name: express-app
-        image: express-app
-        state: started
-        ports:
-          - "3000:3000"
-          
-    - name: Copy application files to remote server
+    - name: Copy Docker image tar file to remote server
       copy:
-        src: /home/MP20040674/Cloud-Server-Automation/
-        dest: /home/MP20040674/
-        mode: '0755'
-    
-    - name: Build the Docker image for the Express app on the remote server
-      command: docker build -t express-app /home/MP20040674/
-      args:
-        chdir: /home/MP20040674/
+        src: /home/MP20040674/Cloud-Server-Automation/express-app.tar     # Local path to the .tar file
+        dest: /home/MP20040674/express-app.tar        # Remote destination path
+        mode: '0644'
+
+    - name: Load Docker image from tar file on remote server
+      command: docker load -i /home/MP20040674/express-app.tar
 
     - name: Run the Docker container for the Express app
       docker_container:
