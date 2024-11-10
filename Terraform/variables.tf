@@ -25,11 +25,11 @@ variable "admin_username" {
 variable "public_key_path" {
   description = "Path to SSH public key"
   type        = string
-  default     ="/home/MP20040674/.ssh/id_ed25519.pub")  
+  default     ="/home/MP20040674/.ssh/id_ed25519.pub"
 }
 
 variable "private_key_path" {
   description = "Path to SSH private key"
   type        = string
-  default     ="/home/MP20040674/.ssh/id_ed25519")
+  default     ="/home/MP20040674/.ssh/id_ed25519"
 }
