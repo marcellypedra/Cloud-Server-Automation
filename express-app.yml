@@ -1,5 +1,7 @@
 - name: Build, save, and deploy Docker container to remote server
   hosts: localhost
+  environment:
+    ANSIBLE_HOST_KEY_CHECKING: "False"
   tasks:
     - name: Build the Docker image locally
       command: docker build -t express-app /home/MP20040674/Cloud-Server-Automation/
