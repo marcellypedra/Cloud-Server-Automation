@@ -155,7 +155,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
     version   = "latest"
   }
 
-  computer_name  = "Client_Server"
+  computer_name  = "Client-Server"
   disable_password_authentication = true
 
   provisioner "remote-exec" {
