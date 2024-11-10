@@ -8,12 +8,15 @@
         state: started
         enabled: true
 
-    - name: Build and run the Docker container
+    - name: Build the Docker image for the Express app
+      command: docker build -t express-app /home/MP20040674/Cloud-Server-Automation
+      args:
+        chdir: /home/MP20040674/Cloud-Server-Automation
+
+    - name: Run the Docker container for the Express app
       docker_container:
         name: express-app
         image: express-app
         state: started
-        build:
-          path: /home/MP20040674/Cloud-Server-Automation
         ports:
           - "3000:3000"
