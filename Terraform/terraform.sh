@@ -23,18 +23,23 @@ sudo apt-get install -y terraform
 echo "Verifying the Terraform installation..."
 terraform --version
 
+# removing files
 rm LICENSE.txt
 rm terraform_1.9.8_linux_amd64.zip
 # Installation complete
 echo "Terraform installation complete."
 
-cd terraform
+# Access to folder terraform and command init
+cd Terraform
 terraform init
+
+# Validation of terraform files and planning
 echo "Terraform validation in progress..."
 terraform validate
-
+chmod +x ~/.ssh/id_ed25519.pub
 echo "Terraform planning in progress..."
 terraform plan
 
+# Run terraform with ssh
 echo "Terraform applying in progress..."
-terraform apply
+terraform apply -var="private_key_path=/home/MP20040674/.ssh/id_id_ed25519" -var="public_key_path=/home/MP20040674/.ssh/id_ed25519.pub" -auto-approve
