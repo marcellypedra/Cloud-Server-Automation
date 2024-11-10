@@ -10,26 +10,26 @@ terraform {
 
 provider "azurerm" {
   features {}
-  subscription_id = "70840eef-81ee-40d0-bda2-421217416697"
+  = var.subscription_id
 }
 
 # Declare Resource Group
 resource "azurerm_resource_group" "rg" {
-  name     = "cloud_client-rg"
-  location = "westeurope"
+  name     = "client_server-rg"
+  location = var.location
 }
 
 # Declare Virtual Network
 resource "azurerm_virtual_network" "vnet" {
-  name                = "cloud_client-vnet"
+  name                = "client_server-vnet"
   address_space       = ["10.1.0.0/16"]
-  location            = azurerm_resource_group.rg.location
+  location            = var.location
   resource_group_name = azurerm_resource_group.rg.name
 }
 
 # Declare Subnet
 resource "azurerm_subnet" "subnet" {
-  name                 = "cloud_client-subnet"
+  name                 = "client_server-subnet"
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = ["10.1.0.0/24"]
@@ -37,8 +37,8 @@ resource "azurerm_subnet" "subnet" {
 
 # Declare Network Security Group with Fixed Protocol
 resource "azurerm_network_security_group" "nsg" {
-  name                = "cloud_client-nsg"
-  location            = azurerm_resource_group.rg.location
+  name                = "client_server-nsg"
+  location            = var.location
   resource_group_name = azurerm_resource_group.rg.name
 
   security_rule {
@@ -76,12 +76,35 @@ resource "azurerm_network_security_group" "nsg" {
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
+    security_rule {
+    name                       = "Express"
+    priority                   = 360
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "3000"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+  security_rule {
+    name                       = "Jenkins"
+    priority                   = 380
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "8080"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
 }
+
 
 # Declare Public IP
 resource "azurerm_public_ip" "public_ip" {
-  name                = "cloud_client-public_ip"
-  location            = azurerm_resource_group.rg.location
+  name                = "client_server-public_ip"
+  location            = var.location
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Static"
   sku 				  = "Standard"
@@ -89,35 +112,35 @@ resource "azurerm_public_ip" "public_ip" {
 
 # Declare Network Interface
 resource "azurerm_network_interface" "nic" {
-  name                = "cloud_client-nic"
-  location            = azurerm_resource_group.rg.location
+  name                = "client_server-nic"
+  location            = var.location
   resource_group_name = azurerm_resource_group.rg.name
 
   ip_configuration {
-    name                          = "cloud_client-nic-config"
+    name                          = "client_server-nic-config"
     subnet_id                     = azurerm_subnet.subnet.id
     private_ip_address_allocation = "Static"
-    private_ip_address            = "10.1.0.4"  
+    private_ip_address            = var.private_ip 
     public_ip_address_id          = azurerm_public_ip.public_ip.id
   }
 }
 
 # Declare Virtual Machine
 resource "azurerm_linux_virtual_machine" "vm" {
-  name                = "cloud_client-vm"
-  location            = azurerm_resource_group.rg.location
+  name                = "client_server-vm"
+  location            = var.location
   resource_group_name = azurerm_resource_group.rg.name
   network_interface_ids = [
     azurerm_network_interface.nic.id,
   ]
 
   size               = "Standard_B1s"
-  admin_username     = "MP20040674"
+  admin_username     = var.admin_username
   
    # Configure SSH key for access
-  admin_ssh_key {
-    username   = "MP20040674"  # Should match admin_username
-    public_key = file("~/.ssh/id_ed25519.pub")  # Path to your public SSH key file
+   admin_ssh_key {
+    username   = var.admin_username
+    public_key = file(var.public_key_path)
   }
 
   os_disk {
@@ -132,8 +155,23 @@ resource "azurerm_linux_virtual_machine" "vm" {
     version   = "latest"
   }
 
-  computer_name  = "Cloud Client"
+  computer_name  = "Client_Server"
   disable_password_authentication = true
+
+  provisioner "remote-exec" {
+    inline = [
+      "echo ${file(var.public_key_path)} >> ~/.ssh/authorized_keys",
+      "chmod 700 ~/.ssh",
+      "chmod 600 ~/.ssh/authorized_keys"
+    ]
+
+    connection {
+      type        = "ssh"
+      user        = var.admin_username
+      private_key = file(var.private_key_path)
+      host        = azurerm_linux_virtual_machine.vm.public_ip_address
+    }
+  }
 }
 
 # Associate NSG with Subnet
