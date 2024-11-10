@@ -8,14 +8,14 @@
         state: started
         enabled: true
 
-    - name: Pull Docker image from local build
+   - name: Build Docker image on the server
+    command: docker build -t express-app  /home/MP20040674/Cloud-Server-Automation
+
+    - name: Pull Docker image from local build to the client
       copy:
         src: /home/MP20040674/Cloud-Server-Automation/
         dest: /usr/src/app
         mode: 0755
-
-    - name: Build Docker image on the server
-      command: docker build -t express-app /usr/src/app/express-app
 
     - name: Run Docker container for sample app
       docker_container:
