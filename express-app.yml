@@ -4,7 +4,15 @@
     - name: Build the Docker image locally
       command: docker build -t express-app /home/MP20040674/Cloud-Server-Automation/
       args:
-        chdir: /home/MP20040674/Cloud-Server-Automation/   # Adjust this path to your app's directory
+        chdir: /home/MP20040674/Cloud-Server-Automation/ 
+        
+    - name: Run the Docker container for the Express app
+      docker_container:
+        name: express-app
+        image: express-app
+        state: started
+        ports:
+          - "3000:3000"
 
     - name: Save the Docker image to a tar file
       command: docker save -o /home/MP20040674/Cloud-Server-Automation/express-app.tar express-app
