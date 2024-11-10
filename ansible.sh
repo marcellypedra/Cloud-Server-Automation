@@ -24,11 +24,9 @@ echo "Setting Up the Python Virtual Environment in progress..."
   # Verify TAnsible installation
 echo "Verifying the Ansible installation..."
   ansible --version
- #create files required for Ansible run
- touch inventory.ini #pull it from Github?
- touch docker_install.yml #pull it from Github?
 
 # Running Ansible to install Docker on VM
 echo "Installing Docker on VM..."
   ansible all -i inventory.ini -m ping
+  sudo usermod -aG docker MP20040674
   ansible-playbook -i inventory.ini docker_install.yml
