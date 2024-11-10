@@ -20,3 +20,22 @@
         state: started
         ports:
           - "3000:3000"
+          
+    - name: Copy application files to remote server
+      copy:
+        src: /home/MP20040674/Cloud-Server-Automation/
+        dest: /home/MP20040674/
+        mode: '0755'
+    
+    - name: Build the Docker image for the Express app on the remote server
+      command: docker build -t express-app /home/MP20040674/
+      args:
+        chdir: /home/MP20040674/
+
+    - name: Run the Docker container for the Express app
+      docker_container:
+        name: express-app
+        image: express-app
+        state: started
+        ports:
+          - "3000:3000"
