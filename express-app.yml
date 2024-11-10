@@ -9,7 +9,7 @@
         enabled: true
 
    - name: Build Docker image on the server
-    command: docker build -t express-app  /home/MP20040674/Cloud-Server-Automation
+      command: docker build -t express-app  /home/MP20040674/Cloud-Server-Automation
 
     - name: Pull Docker image from local build to the client
       copy:
