@@ -1,107 +1,153 @@
 # Cloud
-# Infrastructure Setup
+
 
 This repository contains scripts to install Terraform, Ansible, and Docker on your VM Azure.
 
 #Prepare Environment
 
 1. Create VM Linux as a Server using Azure (https://learn.microsoft.com/en-us/azure/virtual-machines/windows/quick-create-portal)
-2. Access your VM trhough your local terminal using SSH
+
+2. Configure Port 8080 in you Server-VM
+- Go to Networking under your VM settings in the Azure portal.
+- Add an inbound port rule (name: Jenkins) to allow TCP traffic on port 8080. 
+
+3. Access your Server VM trhough your local terminal using SSH
 
 WSL | PowerShell | Command Prompt
 shh your_user@ServerVM_public_ip or shh your_user@ServerVM_DNS
 
-3. Create an SSH Key for the Server VM
-ssh-keygen
+## Initial Installation
 
-
-## Clone this repository:
-   ```git clone https://github.com/marcellypedra/Cloud-Server-Automation.git```   
-   ```cd Cloud-Server-Automation/Terraform```
-   
-   ### Make the script executable by giving it the correct permissions. 
-      chmod +x terraform.sh docker.sh ansible.sh jenkins.sh
-
-      ## Initial Installation
 1. ```./initial_installation.sh```
   
 2. Access by URL and code to authenticate   
       ```https://microsoft.com/devicelogin ```
 
+3. Create an SSH Key for the CloudServer VM
+ssh-keygen
+
+
+
+## Clone this repository:
+   ```git clone https://github.com/marcellypedra/Cloud-Server-Automation.git``` 
+
+   ### Make the script executable by giving it the correct permissions. 
+      chmod +x terraform.sh docker.sh ansible.sh jenkins.sh
+
+```cd Cloud-Server-Automation/Terraform```
+   ### Make the script executable by giving it the correct permissions.
+   chmod +x terraform.sh
+
+
+# Infrastructure Setup (ClientServer)
+
    - Terraform install and verify
-      1. ```./terraform.sh```   
-      
+      1. ```./terraform.sh```  
+
+ 
+# Configuration Management   
    - Ansible and Docker install and verify
       1. ```./ansible.sh```   
      
-
+# Docker Container Deployment
    - Docker create an image, push container and verify
       1. ```./docker.sh```
-    
-Preparing environment for Jenkins
 
-Port 8080 configuration
-- Open Port 8080 in Azure VM:
-1. Go to Networking under your VM settings in the Azure portal.
-2. Add an inbound port rule to allow TCP traffic on port 8080.
-Pipeline configuration (Jenkins)
-
-- Jenkins Install
-  1. ````./jenkins.sh````
+# CI/CD Pipeline Integration    
+   - Jenkins Install
+   1. ````./jenkins.sh````
 
 
-- Access Jenkins Web Interface
-1. In your browser, go to http://your-vm-ip-address:8080.
-2. You should see the Jenkins setup page.
+ # Configuring Pipeline
 
-- Complete Setup
-  1. Go back to the terminal and find the initial admin password:
+1. Access Jenkins Web Interface
+ a. In your browser, go to http://your-server-vm-ip-address:8080.
+ b. You should see the Jenkins setup page.
+
+2. Complete Setup
+  a. Go back to the terminal and find the initial admin password:
    ````sudo cat /var/lib/jenkins/secrets/initialAdminPassword````
-  2. Copy the password and paste it into the Jenkins setup page.
-  3. Install Docker plugin, Github plugin, Azure CLI plugin and SSH plugin
-  4. create an admin user
-  5. Complete setup
+  b. Copy the password and paste it into the Jenkins setup page.
+  c. Install Docker plugin, Github plugin, Azure CLI plugin and Credentials Plugin
+  d. create an admin user
+  e. Complete setup
 
-- Github Webhook configuration
+#  Github Webhook configuration
+
 1. Go to your Github Repository settings 
 2. On the left panel, choose "Webooks"
 3. "Add webhook" on the top-right
 4. In the Payload URL field, enter the Jenkins webhook URL, which usually looks like this: http://your-jenkins-url/github-webhook/
 5. Set Content type to "application/json"
-6. Under Which events would you like to trigger this webhook?, select "Just the push event to trigger the webhook only on code pushes."
-7. Click "Add webhook".
+7. Under Which events would you like to trigger this webhook?, select "Just the push event to trigger the webhook only on code pushes."
+8. Click "Add webhook".
 
-- Add SSH Key to Jenkins Credentials
- 1. Go to Jenkins Dashboard > Manage Jenkins > Manage Credentials.
- 2. Under Global credentials, click Add Credentials.
+# Setup SSH access to Jenkins on ClientServer VM
 
-  a. Kind: SSH Username with private key.
-  b. Username: Enter the SSH user for the Azure VM (e.g., azureuser).
-  c.Private Key: Choose Enter directly and paste the contents of your private SSH key (id_rsa).
-  d. ID: Give it an ID like azure-ssh.
+1. Go back to the terminal on your 
+Server VM and access your Jenkins user to create your Jenkins SSH Key:
+
+  ```` sudo su - jenkins ````
+
+```` ssh-keygen -t ed25519 -C "jenkins@[your-server -vm-name]" -f ~/.ssh/id_ed25519 -N "" ````
+
+```` cat ~/.ssh/id_ed25519.pub ````
+
+2. Copy the public key that is displayed and save it for later
+
+3. Access your ClientServer VM using SSH through your CloudServer VM and create a SSH Key for this VM:
+
+```` ssh-keygen -t ed25519 ````
+
+4. Visualize the Keys created e copy this information and save it for later:
+
+```` ls -l ~/.ssh/id_ed25519 ~/.ssh/id_ed25519.pub ````
+```` vi id_ed25519 ```` #privatekey 
+```` vi id_ed25519.pub ```` #publickey 
+
+5. Append the jenkins public key that you saved before to the ClientServer 'authorized_keys' file:
+
+```` echo "[your jenkins public key]" >> ~/.ssh/authorized_keys ````
+```` chmod 600 ~/.ssh/autorized_keys ````
+
+6. Go back to your CloudServer VM and as Jenkins user try the connection to your ClientServer VM:
+
+```` sudo su - jenkins ````
+```` ssh -i ~/.ssh/id_ed25519 your-clientserver-user@your-clientserver-vm-ip ```` 
 
 
-- Set Up the Jenkins Pipeline
-In Jenkins, create a new pipeline project:
+# Finalizing Jenkins pipeline Configuration
 
-1. Go to Jenkins Dashboard > New Item.
+1. Add SSH Key to Jenkins Credentials
+ a. Go to Jenkins Dashboard > Manage Jenkins > Manage Credentials.
+ b. Under Global credentials, click Add Credentials an configure as below:
+
+   *Kind: SSH Username with private key.
+   *Username: Enter the SSH user for the Azure VM (e.g., azureuser).
+   *Private Key: Choose Enter directly and paste the contents of your private SSH key (id_ed25519).
+   *ID: Give it an ID such as AzureUser. (This will be the same for "SSH_Credentials_ID" in your jenkinsfile)
+
+
+# Set Up the Jenkins Pipeline
+
+1. In Jenkins, create a new pipeline project:
+
+ a. Go to Jenkins Dashboard > New Item.
 Choose Pipeline, give it a name,  and select Github Project
 
-2. Under General, check the GitHub Project checkbox.
+ b. Under General, check the GitHub Project checkbox.
 Enter the GitHub repository URL (e.g., https://github.com/your-org/your-repo).
 
-3. To enable Jenkins to pull code from your GitHub repository, configure the Source Code Management (SCM) section.
+ c. To enable Jenkins to pull code from your GitHub repository, configure the Source Code Management (SCM) section.
 
-4. In the Pipeline job configuration, scroll down to the Source Code Management section.
-Select Git.
-Enter your Repository URL (e.g., https://github.com/your-org/your-repo.git).
+2.  In the Pipeline job configuration:
 
-5. Add Credentials if the repository is private, selecting the GitHub credentials you added to Jenkins.
-Specify the branch to build (e.g., main or */main).
-
-6. Select itHub hook trigger for GITScm polling.
-
-
+a. Scroll down to the Source Code Management section.
+b. Select Git.
+c. Enter your Repository URL (e.g., https://github.com/your-org/your-repo.git).
+d. Specify the branch to build (e.g., main or */main).
+e. Select GitHub hook trigger for GITScm polling.
+f. save it and build the pipeline
 
 
 
@@ -119,8 +165,12 @@ Specify the branch to build (e.g., main or */main).
 
 
 
-Click on new item  in the left menu
- 
+
+
+
+
+
+
 
   
    
