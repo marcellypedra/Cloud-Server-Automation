@@ -46,7 +46,7 @@ pipeline {
             steps {
                 sshagent(credentials: ["${SSH_CREDENTIALS_ID}"]) {
                     sh """
-                    ssh -o StrictHostKeyChecking=no ${AZURE_USER}@${AZURE_VM_IP} << EOF
+                    ssh ${AZURE_USER}@${AZURE_VM_IP} << 'EOF'
                     docker load < /tmp/${DOCKER_IMAGE}.tar
                     docker run -d --name express-app-container -p 80:3000 ${DOCKER_IMAGE}:${DOCKER_TAG}
                     EOF
