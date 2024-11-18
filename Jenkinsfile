@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        AZURE_VM_IP = '13.95.119.149'
+        AZURE_VM_IP = '40.91.217.138'
         SSH_CREDENTIALS_ID = 'ServerClient'  // The ID of the SSH credential you created
         DOCKER_IMAGE = 'express-app'
         DOCKER_TAG = 'latest'
