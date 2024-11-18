@@ -16,7 +16,7 @@ pipeline {
                 checkout scm
             }
         }
-        
+
         stage('Build Docker Image') {
             steps {
                 script {
@@ -25,13 +25,13 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Save Docker Image') {
             steps {
                 sh "docker save -o ${DOCKER_IMAGE}.tar ${DOCKER_IMAGE}:${DOCKER_TAG}"
             }
-        }  
-        
+        }
+
         stage('Copy to Azure VM') {
             steps {
                 sshagent(credentials: ["${SSH_CREDENTIALS_ID}"]) {
@@ -41,16 +41,16 @@ pipeline {
                 }
             }
         }
-   
+
         stage('Deploy to Azure VM') {
             steps {
                 sshagent(credentials: ["${SSH_CREDENTIALS_ID}"]) {
                     script {
                         try {
                             sh """
-                            ssh MP20040674@${AZURE_VM_IP} << 'EOF'
-                            docker load < /tmp/express-app.tar
-                            docker run -d --name express-app-container -p 80:3000 express-app:latest
+                            ssh ${AZURE_USER}@${AZURE_VM_IP} << 'EOF'
+                            docker load < /tmp/${DOCKER_IMAGE}.tar
+                            docker run -d --name express-app-container -p 80:3000 ${DOCKER_IMAGE}:${DOCKER_TAG}
                             EOF
                             """
                         } catch (Exception e) {
@@ -58,5 +58,7 @@ pipeline {
                         }
                     }
                 }
-             }
-         }
+            }
+        }
+    }
+}
