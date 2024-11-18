@@ -1,11 +1,15 @@
-# Cloud
+# Cloud-Server-Automation
+
+This repository was created to meet the requirements for Network Systems and Admnistration CAOne (ModuleCode:B9IS121). It contains scripts to Automate a Container Deployment and Admnistration on Cloud.
+
+It gives instructions on how to deploy a Cloud Insfrastructure to host a Server and deploy one Docker Container.
+
+All the configurations were made using Linux in Azure VMs.  
 
 
-This repository contains scripts to install Terraform, Ansible, and Docker on your VM Azure.
+# Prepare Environment
 
-#Prepare Environment
-
-1. Create VM Linux as a Server using Azure (https://learn.microsoft.com/en-us/azure/virtual-machines/windows/quick-create-portal)
+1. Create Linux VM as a Server using Azure (https://learn.microsoft.com/en-us/azure/virtual-machines/windows/quick-create-portal)
 
 2. Configure Port 8080 in you Server-VM
 - Go to Networking under your VM settings in the Azure portal.
