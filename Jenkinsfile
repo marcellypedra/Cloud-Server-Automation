@@ -50,6 +50,7 @@ pipeline {
                     docker load < /tmp/${DOCKER_IMAGE}.tar
                     docker run -d --name express-app-container -p 80:3000 ${DOCKER_IMAGE}:${DOCKER_TAG}
                     EOF
+                    exit \$?  # Return the exit code of the SSH session
                     """
                 }
             }
