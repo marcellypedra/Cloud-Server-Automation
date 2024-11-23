@@ -22,7 +22,7 @@ pipeline {
                 script {
                     sh '''
                     chmod +x ./ansible.sh
-                    ./ansible.sh
+                    bash ./ansible.sh
                     '''
                 }
             }
