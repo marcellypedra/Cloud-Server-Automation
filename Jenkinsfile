@@ -17,6 +17,17 @@ pipeline {
             }
         }
 
+        stage('Run ansible.sh') {  // New stage for running ansible.sh
+            steps {
+                script {
+                    sh '''
+                    chmod +x ./ansible.sh
+                    ./ansible.sh
+                    '''
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
