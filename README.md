@@ -72,7 +72,7 @@ ssh-keygen
   a. Go back to the terminal and find the initial admin password:
    ````sudo cat /var/lib/jenkins/secrets/initialAdminPassword````
   b. Copy the password and paste it into the Jenkins setup page.
-  c. Install Docker plugin, Github plugin, Azure CLI plugin and Credentials Plugin
+  c. Install Docker plugin, Github plugin, Azure CLI plugin, Credentials Plugin and SSH Agent Plugin
   d. create an admin user
   e. Complete setup
 
