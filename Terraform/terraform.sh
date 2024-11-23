@@ -42,4 +42,4 @@ terraform plan
 
 # Run terraform with ssh
 echo "Terraform applying in progress..."
-terraform apply -var="private_key_path=/home/MP20040674/.ssh/id_id_ed25519" -var="public_key_path=/home/MP20040674/.ssh/id_ed25519.pub" -auto-approve
+terraform apply -var="private_key_path=/home/MP20040674/.ssh/id_ed25519" -var="public_key_path=/home/MP20040674/.ssh/id_ed25519.pub" -auto-approve
